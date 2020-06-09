@@ -275,7 +275,7 @@ namespace UnityEditor.Formats.Fbx.Exporter {
     }
 
     [FilePath("ProjectSettings/FbxExportSettings.asset",FilePathAttribute.Location.ProjectFolder)]
-    internal class ExportSettings : ScriptableSingleton<ExportSettings>
+    public class ExportSettings : ScriptableSingleton<ExportSettings>
     {
         public enum ExportFormat { ASCII = 0, Binary = 1}
 
@@ -1381,7 +1381,7 @@ namespace UnityEditor.Formats.Fbx.Exporter {
         }
     }
 
-    internal abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
+    public abstract class ScriptableSingleton<T> : ScriptableObject where T : ScriptableSingleton<T>
     {
         private static T s_Instance;
         public static T instance

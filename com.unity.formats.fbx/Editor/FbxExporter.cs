@@ -256,7 +256,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         /// <summary>
         /// Gets the version number of the FbxExporters plugin from the readme.
         /// </summary>
-        internal static string GetVersionFromReadme()
+        public static string GetVersionFromReadme()
         {
             if (!File.Exists (ChangeLogPath)) {
                 Debug.LogWarning (string.Format("Could not find version number, the ChangeLog file is missing from: {0}", ChangeLogPath));
@@ -3085,7 +3085,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
             return exportData;
         }
 
-        internal static IExportData GetExportData(GameObject go, IExportOptions exportOptions = null)
+        public static IExportData GetExportData(GameObject go, IExportOptions exportOptions = null)
         {
             if (exportOptions==null)
                 exportOptions = DefaultOptions;
@@ -3229,7 +3229,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         /// </summary>
         /// <returns>The hierarchy count.</returns>
         /// <param name="exportSet">Export set.</param>
-        internal int GetHierarchyCount (HashSet<GameObject> exportSet)
+        public static int GetHierarchyCount (HashSet<GameObject> exportSet)
         {
             int count = 0;
             Queue<GameObject> queue = new Queue<GameObject> (exportSet);
@@ -3252,7 +3252,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         /// <returns>The revised export set</returns>
         /// <param name="unityExportSet">Unity export set.</param>
         [SecurityPermission(SecurityAction.LinkDemand)]
-        internal static HashSet<GameObject> RemoveRedundantObjects(IEnumerable<UnityEngine.Object> unityExportSet)
+        public static HashSet<GameObject> RemoveRedundantObjects(IEnumerable<UnityEngine.Object> unityExportSet)
         {
             // basically just remove the descendents from the unity export set
             HashSet<GameObject> toExport = new HashSet<GameObject> ();
@@ -3327,7 +3327,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         /// </summary>
         /// <returns>Center of gameObjects.</returns>
         /// <param name="gameObjects">Game objects.</param>
-        internal static Vector3 FindCenter(IEnumerable<GameObject> gameObjects)
+        public static Vector3 FindCenter(IEnumerable<GameObject> gameObjects)
         {
             Bounds bounds = new Bounds();
             // Assign the initial bounds to first GameObject's bounds
@@ -3354,7 +3354,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
             return t.position - center;
         }
 
-        internal enum TransformExportType { Local, Global, Reset };
+        public enum TransformExportType { Local, Global, Reset };
 
         /// <summary>
         /// Export all the objects in the set.
@@ -3598,7 +3598,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
 
         static bool exportCancelled = false;
 
-        static bool ExportProgressCallback (float percentage, string status)
+        public static bool ExportProgressCallback (float percentage, string status)
         {
             // Convert from percentage to [0,1].
             // Then convert from that to [0.5,1] because the first half of
@@ -4191,7 +4191,7 @@ namespace UnityEditor.Formats.Fbx.Exporter
         }
 
         [SecurityPermission(SecurityAction.LinkDemand)]
-        internal static string ExportObject (
+        public static string ExportObject (
             string filePath, 
             UnityEngine.Object root,
             IExportOptions exportOptions = null
@@ -4226,6 +4226,22 @@ namespace UnityEditor.Formats.Fbx.Exporter
         public static string ExportObject (string filePath, UnityEngine.Object singleObject)
         {
             return ExportObjects(filePath, new Object[] {singleObject}, exportOptions: null);
+        }
+
+                /// <summary>
+        /// Exports a single Unity GameObject to an FBX file.
+        /// </summary>
+        /// <returns>
+        /// The FBX file path if successful; otherwise null.
+        /// </returns>
+        /// <param name="filePath">Absolute file path to use for the FBX file.</param>
+        /// <param name="singleObject">The Unity GameObject to export.</param>
+        [SecurityPermission(SecurityAction.LinkDemand)]
+        public static string ExportObjectToBinary (string filePath, UnityEngine.Object singleObject)
+        {
+            var settings = new ExportModelSettingsSerialize();
+            settings.SetExportFormat(ExportSettings.ExportFormat.Binary);
+            return ExportObjects(filePath, new Object[] {singleObject}, exportOptions: settings);
         }
 
         /// <summary>
@@ -4326,5 +4342,6 @@ namespace UnityEditor.Formats.Fbx.Exporter
                 InvalidCharReplacement.ToString()
             );
         }
+
     }
 }
